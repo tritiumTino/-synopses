@@ -10,17 +10,13 @@
 {% endblock content_title %}
 
 {% block content %}
-<ul>
     {% for topic in topics %}
-    <li>
         <h3>
-            <a class="btn btn-primary" href="{{ topic.id }}" role="button">{{ topic }}</a>
+            <a class="btn btn-primary" href="{% url 'learning_logs:topic' topic.id %}" role="button">{{ topic }}</a>
         </h3>
-    </li>
     {% empty %}
     <li><h3>No topics have been added yet.</h3></li>
     {% endfor %}
-</ul>
 <small>
     <a class="btn btn-outline-primary" href="{% url 'learning_logs:new_topic' %}" role="button">New topic</a>
 </small>
