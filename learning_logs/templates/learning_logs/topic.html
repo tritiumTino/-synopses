@@ -6,17 +6,16 @@
 
 {% block content %}
 <p>
-    <a href="{% url 'learning_logs:new_entry' topic.id %}">Add new entry</a>
+    <a class="btn btn-primary" href="{% url 'learning_logs:new_entry' topic.id %}" role="button">Add new entry</a>
 </p>
 <ul>
     {% for entry in entries %}
     <div class="card mb-3">
         <h4 class="card-header">
-            <a href="{% url 'learning_logs:entry' entry.id %}">{{ entry.title }}</a>
-
-        <small>
-            {{ entry.date_added | date:'M d, Y H:i' }}
-        </small>
+            <a class="btn btn-outline-primary" href="{% url 'learning_logs:entry' entry.id %}" role="button">{{ entry.title }}</a>
+            <small>
+                {{ entry.date_added | date:'M d, Y H:i' }}
+            </small>
         </h4>
     </div>
     <div class="card-body">
