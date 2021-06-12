@@ -51,6 +51,16 @@ def new_topic(request):
 
 
 @login_required
+def entry(request, entry_id):
+    # one entry
+    entry = Entry.objects.get(id=entry_id)
+    topic = entry.topic
+    if check_topic_owner(topic, request):
+        context = {'topic': topic, 'entry': entry}
+        return render(request, 'learning_logs/entry.html', context=context)
+
+
+@login_required
 def new_entry(request, topic_id):
     # create new entry
     topic = Topic.objects.get(id=topic_id)

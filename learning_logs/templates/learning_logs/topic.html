@@ -12,14 +12,15 @@
     {% for entry in entries %}
     <div class="card mb-3">
         <h4 class="card-header">
-          {{ entry.date_added | date:'M d, Y H:i' }}
+            <a href="{% url 'learning_logs:entry' entry.id %}">{{ entry.title }}</a>
+
         <small>
-            <a href="{% url 'learning_logs:edit_entry' entry.id %}">Edit entry</a>
+            {{ entry.date_added | date:'M d, Y H:i' }}
         </small>
         </h4>
     </div>
     <div class="card-body">
-        {{ entry.text | linebreaks }}
+        {{ entry.text|truncatewords:25 }}
     </div>
 
     {% empty %}
