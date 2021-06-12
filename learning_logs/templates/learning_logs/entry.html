@@ -19,6 +19,6 @@
 </div>
 
 <div class="card-body">
-    <a class="btn btn-outline-primary" href="{% url 'learning_logs:topic' topic.id %}" role="button">{{ topic }}</a>
+    <a class="btn btn-outline-primary" href="{% url 'learning_logs:topic' entry.topic.id %}" role="button">{{ entry.topic }}</a>
 </div>
 {% endblock content %}

@@ -9,7 +9,7 @@
     <a class="btn btn-outline-primary" href="{% url 'learning_logs:new_entry' topic.id %}" role="button">Add new entry</a>
 </p>
 <ul>
-    {% for entry in entries %}
+    {% for entry in topic.entries.all %}
     <div class="card mb-3">
         <h4 class="card-header">
             <a class="btn btn-primary" href="{% url 'learning_logs:entry' entry.id %}" role="button">{{ entry.title }}</a>

@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.views.generic import View
+from .utils import ObjDetailMixin
 
 
 def check_topic_owner(topic, request):
@@ -25,16 +27,6 @@ def topics(request):
 
 
 @login_required
-def topic(request, topic_id):
-    # one topic with all entries
-    topic = Topic.objects.get(id=topic_id)
-    if check_topic_owner(topic, request):
-        entries = topic.entry_set.order_by('-date_added')
-        context = {'topic': topic, 'entries': entries}
-        return render(request, 'learning_logs/topic.html', context=context)
-
-
-@login_required
 def new_topic(request):
     # create new topic
     if request.method != 'POST':
@@ -48,16 +40,6 @@ def new_topic(request):
             return redirect('learning_logs:topics')
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
-
-
-@login_required
-def entry(request, entry_id):
-    # one entry
-    entry = Entry.objects.get(id=entry_id)
-    topic = entry.topic
-    if check_topic_owner(topic, request):
-        context = {'topic': topic, 'entry': entry}
-        return render(request, 'learning_logs/entry.html', context=context)
 
 
 @login_required
@@ -93,3 +75,17 @@ def edit_entry(request, entry_id):
                 return redirect('learning_logs:topic', topic_id=topic.id)
         context = {'entry': entry, 'topic': topic, 'form': form}
         return render(request, 'learning_logs/edit_entry.html', context)
+
+
+class EntryDetail(ObjDetailMixin, View):
+    model = Entry
+    template = 'learning_logs/entry.html'
+
+
+class TopicDetail(ObjDetailMixin, View):
+    model = Topic
+    template = 'learning_logs/topic.html'
+    # def get(self, request, topic_id):
+    #     topic = get_object_or_404(Topic, id=topic_id)
+    #     return render(request, 'learning_logs/topic.html',
+    #                   context={'topic': topic, 'entries': topic.entries.order_by('-date_added')})

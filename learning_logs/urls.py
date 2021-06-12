@@ -2,6 +2,7 @@
 
 from django.urls import path
 from . import views
+from django.contrib.auth.decorators import login_required
 
 
 app_name = 'learning_logs'
@@ -11,7 +12,7 @@ urlpatterns = [
     # page with all topics
     path('topics/', views.topics, name='topics'),
     # topic all entries
-    path('topics/<int:topic_id>/', views.topic, name='topic'),
+    path('topics/<int:id>/', login_required(views.TopicDetail.as_view()), name='topic'),
     # create new topic
     path('new_topic/', views.new_topic, name='new_topic'),
     # create new entry
@@ -19,5 +20,5 @@ urlpatterns = [
     # edit entry
     path('entry/<int:entry_id>/edit/', views.edit_entry, name='edit_entry'),
     # read entry
-    path('entry/<int:entry_id>/', views.entry, name='entry'),
+    path('entry/<int:id>/', login_required(views.EntryDetail.as_view()), name='entry'),
 ]
