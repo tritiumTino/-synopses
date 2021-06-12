@@ -17,7 +17,8 @@
 <div class="card-body">
     {{entry.text}}
 </div>
+
 <div class="card-body">
-    <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+    <a class="btn btn-primary" href="{% url 'learning_logs:topic' topic.id %}" role="button">{{ topic }}</a>
 </div>
 {% endblock content %}
