@@ -1,10 +1,11 @@
 from django.shortcuts import redirect
-from .models import Topic, Entry
-from .forms import TopicForm, EntryForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import Topic, Entry
+from .forms import TopicForm, EntryForm
 from .utils import *
 
 
@@ -23,7 +24,11 @@ def topics(request):
 @login_required
 def read_topic(request, id):
     topic = get_object_or_404(Topic, id=id)
-    entries = topic.entries.all()
+    search_query = request.GET.get('search', '')
+    if search_query:
+        entries = topic.entries.filter(Q(title__icontains=search_query) | Q(text__icontains=search_query))
+    else:
+        entries = topic.entries.all()
     paginator = Paginator(entries, 10)
 
     page_number = request.GET.get('page', 1)

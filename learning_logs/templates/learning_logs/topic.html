@@ -2,6 +2,13 @@
 
 {% block title %}Topic: {{ topic }}{% endblock title %}
 
+{% block nav %}
+    <form class="d-flex">
+        <input class="form-control me-2" type="search" action="{% url 'learning_logs:topic' topic.id %}" placeholder="Search" aria-label="Search" name="search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+{% endblock nav %}
+
 {% block content_title %}Entries:{% endblock content_title %}
 
 {% block content %}
