@@ -2,12 +2,14 @@
 
 {% block title %}Add new entry{% endblock title %}
 
-{% block content_title %}Add a new entry for {{ topic }} topic:{% endblock content_title %}
+{% block content_title %}Add a new entry for {{ form.topic }} topic:{% endblock content_title %}
 
 {% block content %}
 <form action="{% url 'learning_logs:new_entry' topic.id %}" method='post'>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit" class="btn btn-outline-primary">add entry</button>
+    <div class="w-75 p-3">
+        {{ form.as_p }}
+        <button name="submit" class="btn btn-outline-primary">add entry</button>
+    </div>
 </form>
 {% endblock content %}

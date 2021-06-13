@@ -21,7 +21,7 @@ class Topic(models.Model):
 class Entry(models.Model):
     """the information learned by the user on the topic"""
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, verbose_name='Тема', related_name='entries')
-    title = models.CharField(max_length=150, default='Title', verbose_name='Заголовок', db_index=True)
+    title = models.CharField(max_length=150, default='', verbose_name='Заголовок', db_index=True)
     text = models.TextField(default='', verbose_name='Содержание')
     date_added = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Опубликовано')
 

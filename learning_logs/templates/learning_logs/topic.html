@@ -6,13 +6,15 @@
 
 {% block content %}
 <p>
-    <a class="btn btn-outline-primary" href="{% url 'learning_logs:new_entry' topic.id %}" role="button">Add new entry</a>
+    <a class="btn btn-outline-primary" href="{% url 'learning_logs:new_entry' topic.id %}" role="button">Add new
+        entry</a>
 </p>
 <ul>
-    {% for entry in topic.entries.all %}
+    {% for entry in page.object_list %}
     <div class="card mb-3">
         <h4 class="card-header">
-            <a class="btn btn-primary" href="{% url 'learning_logs:entry' entry.id %}" role="button">{{ entry.title }}</a>
+            <a class="btn btn-primary" href="{% url 'learning_logs:entry' entry.id %}"
+               role="button">{{ entry.title }}</a>
             <small>
                 {{ entry.date_added | date:'M d, Y H:i' }}
             </small>
@@ -26,4 +28,29 @@
     <li>There are no entries for this topic yet.</li>
     {% endfor %}
 </ul>
+{% if is_paginated %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center mb-5">
+            <li class="page-item {% if not prev_url %}disabled {% endif %}">
+                <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            {% for n in page.paginator.page_range %}
+                {% if n == page.number %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                    </li>
+                {% elif n > page.number|add:-3 and n < page.number|add:3 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            <li class="page-item {% if not next_url %}disabled {% endif %}">
+                <a class="page-link" href="{{ next_url }}">Next</a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}
+<div class="mb-5"></div>
 {% endblock content %}

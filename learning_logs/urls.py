@@ -1,24 +1,16 @@
 """Defines schemas URL for learning_logs."""
 
 from django.urls import path
-from . import views
-from django.contrib.auth.decorators import login_required
+from .views import *
 
 
 app_name = 'learning_logs'
 urlpatterns = [
-    # homepage
-    path('', views.index, name='index'),
-    # page with all topics
-    path('topics/', views.topics, name='topics'),
-    # topic all entries
-    path('topics/<int:id>/', login_required(views.TopicDetail.as_view()), name='topic'),
-    # create new topic
-    path('new_topic/', views.new_topic, name='new_topic'),
-    # create new entry
-    path('new_entry/<int:topic_id>/', views.new_entry, name='new_entry'),
-    # edit entry
-    path('entry/<int:entry_id>/edit/', views.edit_entry, name='edit_entry'),
-    # read entry
-    path('entry/<int:id>/', login_required(views.EntryDetail.as_view()), name='entry'),
+    path('', index, name='index'),
+    path('topics/', topics, name='topics'),
+    path('topics/<int:id>/', read_topic, name='topic'),
+    path('new_topic/', TopicCreate.as_view(), name='new_topic'),
+    path('new_entry/<int:topic_id>/', EntryCreate.as_view(), name='new_entry'),
+    path('entry/<int:entry_id>/edit/', edit_entry, name='edit_entry'),
+    path('entry/<int:id>/', EntryDetail.as_view(), name='entry'),
 ]

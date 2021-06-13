@@ -5,9 +5,11 @@
 {% block content_title %}Add new topic:{% endblock content_title %}
 
 {% block content %}
-  <form action="{% url 'learning_logs:new_topic' %}" method='post'>
+<form action="{% url 'learning_logs:new_topic' %}" method='post'>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit" class="btn btn-outline-primary">add topic</button>
-  </form>
+    <div class="w-75 p-3">
+        {{ form.as_p }}
+        <button name="submit" class="btn btn-outline-primary">add topic</button>
+    </div>
+</form>
 {% endblock content %}
