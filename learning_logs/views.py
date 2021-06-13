@@ -24,33 +24,34 @@ def topics(request):
 @login_required
 def read_topic(request, id):
     topic = get_object_or_404(Topic, id=id)
-    search_query = request.GET.get('search', '')
-    if search_query:
-        entries = topic.entries.filter(Q(title__icontains=search_query) | Q(text__icontains=search_query))
-    else:
-        entries = topic.entries.all()
-    paginator = Paginator(entries, 10)
+    if check_topic_owner(topic, request):
+        search_query = request.GET.get('search', '')
+        if search_query:
+            entries = topic.entries.filter(Q(title__icontains=search_query) | Q(text__icontains=search_query))
+        else:
+            entries = topic.entries.all()
+        paginator = Paginator(entries, 10)
 
-    page_number = request.GET.get('page', 1)
-    page = paginator.get_page(page_number)
-    is_paginated = page.has_other_pages()
+        page_number = request.GET.get('page', 1)
+        page = paginator.get_page(page_number)
+        is_paginated = page.has_other_pages()
 
-    if page.has_previous():
-        prev_url = '?page={}'.format(page.previous_page_number())
-    else:
-        prev_url = ''
+        if page.has_previous():
+            prev_url = '?page={}'.format(page.previous_page_number())
+        else:
+            prev_url = ''
 
-    if page.has_next():
-        next_url = '?page={}'.format(page.next_page_number())
-    else:
-        next_url = ''
+        if page.has_next():
+            next_url = '?page={}'.format(page.next_page_number())
+        else:
+            next_url = ''
 
-    context = {'page': page,
-               'topic': topic,
-               'is_paginated': is_paginated,
-               'next_url': next_url,
-               'prev_url': prev_url}
-    return render(request, 'learning_logs/topic.html', context=context)
+        context = {'page': page,
+                   'topic': topic,
+                   'is_paginated': is_paginated,
+                   'next_url': next_url,
+                   'prev_url': prev_url}
+        return render(request, 'learning_logs/topic.html', context=context)
 
 
 class TopicCreate(LoginRequiredMixin, ObjCreateMixin, View):
@@ -87,20 +88,23 @@ def edit_entry(request, entry_id):
 class EntryDetail(LoginRequiredMixin, ObjDetailMixin, View):
     model = Entry
     template = 'learning_logs/entry.html'
+    obj_param = 'topic'
 
 
 class EntryCreate(LoginRequiredMixin, View):
     def get(self, request, topic_id):
         form = EntryForm()
         topic = Topic.objects.get(id=topic_id)
-        return render(request, 'learning_logs/new_entry.html', context={'form': form, 'topic': topic})
+        if check_topic_owner(topic, request):
+            return render(request, 'learning_logs/new_entry.html', context={'form': form, 'topic': topic})
 
     def post(self, request, topic_id):
         form = EntryForm(data=request.POST)
         topic = Topic.objects.get(id=topic_id)
-        if form.is_valid():
-            new_entry = form.save(commit=False)
-            new_entry.topic = topic
-            new_entry.save()
-            return redirect('learning_logs:topic', id=topic_id)
-        return render(request, 'learning_logs/new_entry.html', context={'form': form, 'topic': topic})
+        if check_topic_owner(topic, request):
+            if form.is_valid():
+                new_entry = form.save(commit=False)
+                new_entry.topic = topic
+                new_entry.save()
+                return redirect('learning_logs:topic', id=topic_id)
+            return render(request, 'learning_logs/new_entry.html', context={'form': form, 'topic': topic})

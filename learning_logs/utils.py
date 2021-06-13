@@ -11,10 +11,12 @@ def check_topic_owner(topic, request):
 class ObjDetailMixin:
     model = None
     template = None
+    obj_param = None
 
     def get(self, request, id):
         obj = get_object_or_404(self.model, id=id)
-        return render(request, self.template, context={self.model.__name__.lower(): obj})
+        if check_topic_owner(obj.__getattribute__(self.obj_param), request):
+            return render(request, self.template, context={self.model.__name__.lower(): obj})
 
 
 class ObjCreateMixin:
