@@ -10,7 +10,6 @@ from .utils import *
 
 
 def index(request):
-    # homepage
     return render(request, 'learning_logs/index.html')
 
 
@@ -82,7 +81,7 @@ def edit_entry(request, entry_id):
                 form.save()
                 return redirect('learning_logs:topic', id=topic.id)
         context = {'entry': entry, 'topic': topic, 'form': form}
-        return render(request, 'learning_logs/edit_entry.html', context)
+        return render(request, 'learning_logs/edit_entry.html', context=context)
 
 
 class EntryDetail(LoginRequiredMixin, ObjDetailMixin, View):

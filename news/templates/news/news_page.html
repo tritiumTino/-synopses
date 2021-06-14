@@ -1,0 +1,24 @@
+{% extends "learning_logs/base.html" %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content_title %}
+News
+{% endblock content_title %}
+
+{% block content %}
+{% for item in news %}
+    <div class="col-sm-6">
+        <div class="card" style="width: 18rem;">
+            <img src="{{ MEDIA_URL }}{{ item.media.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title"> {{ item.title }} </h5>
+                <p class="card-text">{{ item.body }}</p>
+                <a href="#" class="btn btn-primary">Read</a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock content %}
